@@ -14,13 +14,14 @@
 # check PHP on commandline exit if not available.
 . `pwd`/profile.sh
 
-PHP_STATUS=`testcmd php`
-if [ "1" = "$PLAYER_STATUS" ]
-then
-    BAILOUT_ON_FAIL -exitcode 90
-fi
+testcmd php
 
 php $AVSYS_LIB/update_channels.php
+
+if [ $? = 1 ]; then
+   cecho "Shutting Down .... Retry Later." $red
+   exit 1
+fi
 
 N_CHANNELS=`wc -l $AVSYS_CHANNELS | awk '{print $1}'`
 cecho "Number of channels found : $N_CHANNELS" $yellow -n

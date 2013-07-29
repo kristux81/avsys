@@ -22,9 +22,9 @@ export white='\E[37m'
 
 if [ "X`echo -n`" = "X-n" ]
 then
-   echo_n() { echo ${1+"$@"}"\c"; }
+    kecho() { echo -e ${1+"$@"}"\c"; }
 else
-   echo_n() { echo -n ${1+"$@"}; }
+    kecho() { echo -en ${1+"$@"}; }
 fi
 
 cecho ()                     # Color-echo ; $1 = message , $2 = color
@@ -33,14 +33,12 @@ default_msg=" "
 message=${1:-$default_msg}   # Defaults to default message.
 color=${2:-$black}           # Defaults to black, if not specified.
 
-#echo -en "$color"
-echo -e "$color"
-
 if [ "-n" = "$3" ]
 then 
-    echo_n "$message"
+     #echo -en "$color" "$message"
+     kecho "$color" "$message"
 else 
-    echo "$message"
+     echo -e "$color" "$message"
 fi
 
 tput sgr0                      # Reset to normal without clearing screen.

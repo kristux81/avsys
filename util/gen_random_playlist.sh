@@ -17,6 +17,7 @@
 THIS=$0 ; export THIS
 
 # returns a random number
+declare -i getRandom_num
 getRandom()
 {
  #initialize
@@ -37,20 +38,23 @@ getRandom()
  num=$((num+$$))
 
  # Scales $num down within $RANGE.
- let num=num%$RANGE
+ num=$((num % $RANGE))
+ #let num = num % $RANGE
  
  done
  
  log DEBUG "$num"
- return $num
+ #return $num
+getRandom_num=$num
 }
 
 # returns a number next in sequence
+declare -i getNext_num
 getNext()
 {
  RANGE=$1
  
- if [ -z "$AVSYS_DATA/lastplayed"]
+ if [ -z "$AVSYS_DATA/lastplayed" ]
  then 
       num=1 # initialize
  else 
@@ -63,13 +67,14 @@ getNext()
       let num=num+1
 fi
 
-# save last number	  
+# save last number
+mkdir $AVSYS_DATA 2> /dev/null	  
 echo $num > $AVSYS_DATA/lastplayed
 
-return $num
+log DEBUG "$num"
+# return $num
+getNext_num=$num
 }
-
-
 
 if [ -z "$1" ]
 then
@@ -181,13 +186,15 @@ while [  $COUNTER -lt $N_FILES ]
 do
     if [ "0" = "$RANDOMIZER" ]
 	then
-	    num=`getNext $RANGE`
+	    getNext $RANGE
+            num=$getNext_num
 	else
-	    num=`getRandom $RANGE`
+	    getRandom $RANGE
+            num=$getRandom_num
 	fi 
-	
-	cat -n $RESOURCE | sed 's/^[ \t]*//;s/[ \t]*$//' | grep ^$num | head -1 | sed 's/^[0-9 \t]*//' >> $AVSYS_LISTS/$PLAYFILE
-	let COUNTER=COUNTER+1 
+
+        cat -n $RESOURCE | sed 's/^[ \t]*//;s/[ \t]*$//' | grep ^$num | head -1 | sed 's/^[0-9 \t]*//' >> $AVSYS_LISTS/$PLAYFILE
+        let COUNTER=COUNTER+1 
 done
 fi
 

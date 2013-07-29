@@ -45,7 +45,7 @@ get_wrapped_ydays()
 if [ -z "$1" ]
 then
    echo "No input file provided"
-   return 0
+   exit -1
 fi
 
  FILE_YEAR=`ls -l $1 --time-style=+%y | awk '{ print $6 }' | grep .`

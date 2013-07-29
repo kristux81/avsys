@@ -18,7 +18,7 @@ THIS=$0 ; export THIS
 
 if [ $AUTO_STOP_TIME -ge 1 ]
 then
-
+echo "Started with Following Parameter list: $@ " >> auto_stopper.log
 log DEBUG "Started with Following Parameter list: $@ "
 
 #CRON_STAT=`ps -ef|grep cron | grep -v grep | sed -n '$='` ; export CRON_STAT

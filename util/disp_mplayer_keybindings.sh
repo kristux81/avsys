@@ -5,7 +5,9 @@ THIS=$0 ; export THIS
 parse_config()
 {
 # requires a definition
-log ERROR "parse_config not defined yet"
+log ERROR "parse_config not defined yet. Displaying Defaults"
+
+disp_mplayer_keys_default
 }
 
 # mplayer specific default bindings.
@@ -14,32 +16,37 @@ disp_mplayer_keys_default()
 # Shut down default logger for these lines
 export DEF_LOGGER_STATUS=off
 
-cecho "##############################################################" $red
-cecho "Seek Forward (10 sec) : " $yellow   -n
-cecho "RIGHT                   " $green -n   
-cecho "Seek Backward (10 sec): " $yellow   -n
-cecho "LEFT                    " $green
-cecho "Seek Forward (1 min)  : " $yellow   -n
-cecho "UP                      " $green -n   
-cecho "Seek Backward (1 min) : " $yellow   -n
-cecho "DOWN                    " $green	 
-cecho "Seek Forward (10 min) : " $yellow   -n
-cecho "PG-UP                   " $green -n   
-cecho "Seek Backward (10 min): " $yellow   -n
-cecho "PG-DOWN                 " $green
-cecho "Next Song             : " $yellow   -n
-cecho ">                       " $green -n   
-cecho "Previous Song         : " $yellow   -n
-cecho "<                       " $green	     
-cecho "Volume UP             : " $yellow   -n
-cecho "*, 0                    " $green -n   
-cecho "Volume DOWN           : " $yellow   -n
-cecho "/, 9                    " $green	     
-cecho "New PlayList          : " $yellow   -n
-cecho "ESC, q                  " $green -n   
-cecho "Play/Pause            : " $yellow   -n
-cecho "SPACEBAR, p             " $green	
-cecho "##############################################################" $red
+if [ "$RADIO" = "on" ]
+then
+       : 
+else 
+        cecho "############################################################################" $red
+	cecho "Seek Forward (10 sec) : " $yellow -n
+	cecho "RIGHT       " $green -n
+        cecho "Seek Backward (10 sec): " $yellow -n
+	cecho "LEFT        " $green
+	cecho "Seek Forward (1 min)  : " $yellow -n
+	cecho "UP          " $green -n   
+	cecho "Seek Backward (1 min) : " $yellow   -n
+	cecho "DOWN        " $green	 
+	cecho "Seek Forward (10 min) : " $yellow   -n
+	cecho "PG-UP       " $green -n   
+	cecho "Seek Backward (10 min): " $yellow   -n
+	cecho "PG-DOWN     " $green
+	cecho "Next Song             : " $yellow   -n
+	cecho ">           " $green -n   
+	cecho "Previous Song         : " $yellow   -n
+	cecho "<           " $green	     
+	cecho "Volume UP             : " $yellow   -n
+	cecho "*, 0        " $green -n   
+	cecho "Volume DOWN           : " $yellow   -n
+	cecho "/, 9        " $green	     
+	cecho "New PlayList          : " $yellow   -n
+	cecho "ESC, q      " $green -n   
+	cecho "Play/Pause            : " $yellow   -n
+	cecho "SPACEBAR, p " $green
+        cecho "############################################################################" $red	
+fi
 
 # Start default logger again.
 export DEF_LOGGER_STATUS=on

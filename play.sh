@@ -35,7 +35,7 @@ trap sighandle SIGTERM
     MPLAYER=${PLAYER: -7}
 
 # Set default number of songs in playlist
-N_SONGS=10
+N_SONGS=15
 
 # ----------- RADIO LOOP MODE ( N_SONGS = 0 ) ---------
 if [ "0" = "$1" ]
@@ -82,12 +82,15 @@ if [ -z "$INTERACT" ]
 then
 
 # test availability of $PLAYER on shell, Bail out if not available.
+    testcmd $PLAYER
 
-PLAYER_STATUS=`testcmd $PLAYER`
-if [ "1" = "$PLAYER_STATUS" ]
-then
-    BAILOUT_ON_FAIL -cmd "rm $TIMER_PIDFILE 2> /dev/null" -exitcode 89
-fi
+    if [ "on" = "$RADIO" ]
+    then
+	 echo " "
+	 cecho "In order to Switch Channel : " $yellow   -n
+	 cecho "Press ^C       " $green
+	 echo " "
+    fi
 
 # display list before playing songs
     displist
@@ -161,6 +164,7 @@ then
     CHANNEL=`head -1 $AVSYS_LISTS/$PLAYFILE | tr '\n' ' '`
     $PLAYER $MSG_LEVEL -$PLAYER_OPTS $CHANNEL 2> $PLAYER_ERR_LOGS \
     | grep -wi --color 'Name\|Genre\|Website'
+
 else
     $PLAYER $MSG_LEVEL -$PLAYER_OPTS $AVSYS_LISTS/$PLAYFILE 2> $PLAYER_ERR_LOGS
 fi

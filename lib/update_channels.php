@@ -6,8 +6,12 @@ $STATION_FILE=getenv('AVSYS_STATIONS');
 //output file
 $CHANNEL_FILE=getenv('AVSYS_CHANNELS');
 
+//log file
+$LOG_FILE=getenv('AVSYS_LOG_ROOT');
+
 //default station
 $DEFAULT_STATION="http://www.shoutcast.com";
+
 
 function get_all_urls ( $string )
 {
@@ -24,9 +28,32 @@ function get_all_urls ( $string )
 function update_channels ( $station, $CHANNEL_FILE )
 {
  static $loop_count=0;
+ global $LOG_FILE;
 
  echo 'Obtaining Channels From Station : '.$station."\n";
- $channel_list=file_get_contents($station);
+
+	set_error_handler(
+	    create_function(
+		'$severity, $message, $file, $line',
+		'throw new ErrorException($message, $severity, $severity, $file, $line);'
+	    )
+	);
+ 
+   try {
+        $channel_list=file_get_contents($station);
+   }
+   catch (Exception $e)
+   {
+     echo "Failed to obtain Channels from Station : $station \n";
+     echo "Check your Internet Connection \n";
+
+     $errMsg = 'Failed to obtain Channels from Station : ' . $station . "\n"
+              . $e->getFile() . ' : ' . $e->getLine() . ' : ' . $e->getMessage() . "\n";
+
+     file_put_contents( $LOG_FILE . '/radio_statup_fail.log', $errMsg);  
+
+     exit(1);
+   }
  
  if("false" !== $channel_list ) {
     $channels = get_all_urls($channel_list);
@@ -61,6 +88,8 @@ function update_channels ( $station, $CHANNEL_FILE )
        echo "No channels found on station : ".$station." Skipping ..\n";
  }
 }
+
+
 
 
 // --- Program starts here ---
