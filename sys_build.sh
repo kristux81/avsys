@@ -37,10 +37,12 @@ if [ "$SRCHMODE" = "auto" ]
 then
 
 # This script requires a better logic to get search folders
-    #$AVSYS_UTIL/guess_srchlst.sh
+  #$AVSYS_UTIL/guess_srchlst.sh
 
 # this is a temporary fix till then
-	echo /home/`whoami` > $SRCHDIRFILE
+     echo /home > $SRCHDIRFILE
+     echo /media >> $SRCHDIRFILE
+     echo /mnt >> $SRCHDIRFILE
 else 
  log INFO "Manully Generating Search Directory list.."
 
@@ -52,6 +54,25 @@ then
     echo .
     cat $SRCHDIRFILE
     echo .
+    cecho "Sanitizing File : $SRCHDIRFILE" $magenta
+    :> $SRCHDIRFILE.tmp
+    cat $SRCHDIRFILE | while read line
+    do
+       find $line > tmp.out 2> tmp.err
+
+       [ -s tmp.err ]
+       ERRSTAT=$?
+
+       [ -s tmp.out ]
+
+       if [ "1" = "$?" -a "0" = "$ERRSTAT" ]
+       then
+            :
+       else
+           echo $line >> $SRCHDIRFILE.tmp
+       fi
+    done
+    mv $SRCHDIRFILE.tmp $SRCHDIRFILE
 else 
     :> $SRCHDIRFILE
 fi
@@ -60,7 +81,6 @@ fi
 
 while :
 do
-
 cecho "Please enter absolute path of directory you want to be searched." $yellow
 cecho "To quit the loop press q/Q." $yellow
 read Dirname
@@ -69,41 +89,31 @@ if [ "$Dirname" = "q" -o "$Dirname" = "Q" ]
 then
     break
 else
-    find $Dirname 2> temp
-    DIRSTAT=`cat temp | grep "No such file or directory"$ | wc -l`
+    find $Dirname > tmp.out 2> tmp.err
+    
+    [ -s tmp.err ]
+    ERRSTAT=$?
 
-    if [ "$DIRSTAT" = "1" ]
+    [ -s tmp.out ]
+
+    if [ "1" = "$?" -a "0" = "$ERRSTAT" ]
     then
-         cecho "No such File or Directory : $Dirname" $red
+         cecho "$Dirname Does Not Exist or Permission Denied" $red
          cecho "Ignoring ... $Dirname" $red
     else 
          echo $Dirname >> $SRCHDIRFILE
          cecho "$Dirname added to $SRCHDIRFILE" $green
     fi
-
 fi
-
 done
+rm tmp.* 2> /dev/null
 
-cat $SRCHDIRFILE | while read line
-do
-  find $line 2> temp
-  DIRSTAT=`cat temp | grep "No such file or directory"$ | wc -l`
-  if [ "$DIRSTAT" = "1" ]
-  then
-     :
-  else 
-      RUNSTAT=1
-  fi
-done
-
-rm temp 2> /dev/null
-
-if [ "$RUNSTAT" = "1" ]
+cecho "Validating File : $SRCHDIRFILE : " $magenta -n
+if [ -s $SRCHDIRFILE ]
 then
-:
+    cecho "[OK]" $green
 else
-    cecho "No Valid Search Directory Entered by User" $red
+    cecho "[NOT OK]" $red
     cecho "Switching to Auto Search mode.." $yellow
     $AVSYS_UTIL/guess_srchlst.sh 
 fi

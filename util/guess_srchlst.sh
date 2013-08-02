@@ -21,7 +21,7 @@ TMP_FILE=$SRCHDIRFILE.tmp
 # clean old context 
 :> $SRCHDIRFILE
 
-mount | awk '{ print $3 }' | grep -v proc | grep -v boot | grep -v swap | grep -v dev | grep -v sys | grep -v var > $TMP_FILE
+mount | awk '{ print $3 }' | grep -v proc | grep -v boot | grep -v swap | grep -v dev | grep -v sys | grep -v var | grep -v run > $TMP_FILE
 
 for line in `cat $TMP_FILE`
 do
