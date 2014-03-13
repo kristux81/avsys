@@ -26,8 +26,6 @@ repository roots guessed
 during repository build     : etc/srchdir.lst
 radio channel list built
 while scanning stations     : etc/radio/channels.lst
-unprocessed potential
-channels and stations       : etc/radio/channels.lst.not_processed
 
 
 BACKEND
@@ -43,18 +41,19 @@ while rep. build            : util/guess_srchlst.sh
 
 Library :
 ---------
+
+System Profile              : profile.sh
 colored echo                : lib/cecho
-temporary env scripts       : lib/env_gen.sh
-internal diagnostic         : lib/testcmd.sh   
-internet radio channel
-search                      : lib/update_channels.php
-user configuration parser   : lib/cfg_parser.awk
+internal diagnostic         : lib/testcmd.sh 
 System logger               : lib/logger.sh
 time related calculations   : lib/time_stamp.sh
 
+temporary env scripts       : lib/env_gen.sh  
+user configuration parser   : lib/cfg_parser.awk
+
+Generic internet radio
+channel search bot          : lib/channel_updater_bot.php
+Shoutcast radio station bot : lib/shoutcast_bot.php
 
 Audio Repository Builder    : sys_build.sh
-System Profile              : profile.sh 
-
-
 

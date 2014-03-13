@@ -16,7 +16,7 @@
 
 testcmd php
 
-php $AVSYS_LIB/update_channels.php
+php $AVSYS_LIB/shoutcast_bot.php
 
 if [ $? = 1 ]; then
    cecho "Shutting Down .... Retry Later." $red

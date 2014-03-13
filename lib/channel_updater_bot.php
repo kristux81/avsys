@@ -9,9 +9,6 @@ $CHANNEL_FILE=getenv('AVSYS_CHANNELS');
 //log file
 $LOG_FILE=getenv('AVSYS_LOG_ROOT');
 
-//default station
-$DEFAULT_STATION="http://www.shoutcast.com";
-
 
 function get_all_urls ( $string )
 {
@@ -25,7 +22,8 @@ function get_all_urls ( $string )
         }
 }
 
-function update_channels ( $station, $CHANNEL_FILE )
+
+function update_channels ( $station, $CHANNEL_FILE , $url_filter )
 {
  static $loop_count=0;
  global $LOG_FILE;
@@ -67,7 +65,7 @@ function update_channels ( $station, $CHANNEL_FILE )
           if(is_array($url) && in_array("http", $url)) {
 
            // var_dump($url);
-           $pos = strrpos($channel, "?id=");
+           $pos = strrpos($channel, $url_filter);
 
            if ($pos === false){
  
@@ -90,28 +88,3 @@ function update_channels ( $station, $CHANNEL_FILE )
 }
 
 
-
-
-// --- Program starts here ---
-echo 'Parsing Stations File : '.$STATION_FILE."\n";
-$station_list=file_get_contents($STATION_FILE);
-
-if("false" === $station_list ) {
-   echo "Station List Empty. Picking Default Station :".$DEFAULT_STATION." ..\n";
-   $station_list=file_get_contents($DEFAULT_STATION);
-}
-
-$stations=explode("\n",$station_list);
-if("false" !== $stations ) {
-
-// remove existing channels
-   file_put_contents($CHANNEL_FILE, '', LOCK_EX );
-
-   foreach ($stations as $station) {
-
-     if(''==$station)
-       continue ;
-
-     update_channels ( $station, $CHANNEL_FILE );
-   }
-}
