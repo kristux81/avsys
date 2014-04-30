@@ -16,6 +16,15 @@
 # ******************************************************************
 
 . `pwd`/profile.sh
+
+SESSION_FILE=$AVSYS_TMP/$$
+export SESSION_FILE
+if [ -f "$SESSION_FILE" ]
+then
+    :
+else touch $SESSION_FILE
+fi
+
 TIMER_PIDFILE=$AVSYS_ROOT/.timer.pid ; export TIMER_PIDFILE
 
 # Tell logger your current location

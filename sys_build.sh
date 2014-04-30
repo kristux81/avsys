@@ -89,7 +89,7 @@ if [ "$Dirname" = "q" -o "$Dirname" = "Q" ]
 then
     break
 else
-    find $Dirname > tmp.out 2> tmp.err
+    find "$Dirname" > tmp.out 2> tmp.err
     
     [ -s tmp.err ]
     ERRSTAT=$?
@@ -146,7 +146,7 @@ then
  cecho "Now Searching in : " $magenta -n
  cecho "$CURRENT_DIR" $green
 
- nohup find  $CURRENT_DIR                        \
+ nohup find  "$CURRENT_DIR"                        \
              -type f                             \
              -size +$1                            \
              -exec file -i -F " $Delim " {} \;   \

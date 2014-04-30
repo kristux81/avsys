@@ -18,10 +18,12 @@ AVSYS_LIB=$AVSYS_ROOT/lib ; export AVSYS_LIB
 AVSYS_CFG=$AVSYS_ROOT/etc ; export AVSYS_CFG
 AVSYS_UTIL=$AVSYS_ROOT/util ; export AVSYS_UTIL
 AVSYS_LOG_ROOT=$AVSYS_ROOT/logs ; export AVSYS_LOG_ROOT
+AVSYS_TMP=$AVSYS_ROOT/tmp ; export AVSYS_TMP
 AVSYS_STATIONS=$AVSYS_CFG/radio/stations.lst ; export AVSYS_STATIONS
 AVSYS_CHANNELS=$AVSYS_CFG/radio/channels.lst ; export AVSYS_CHANNELS
 
 mkdir $AVSYS_LOG_ROOT 2> /dev/null
+mkdir $AVSYS_TMP 2> /dev/null
 
 # use coloured echo stmts for console and log them to a default log file
 . $AVSYS_LIB/cecho
